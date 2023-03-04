@@ -38,3 +38,5 @@ if __name__ == '__main__':
         for img in test_list:
             shutil.move(species / img, test_path / img)
 
+        # drop old directory
+        species.rmdir()
