@@ -72,11 +72,14 @@ it is much nicer (e.g. compare Mönchsgrasmücke and black cap) and the english 
 
 Here and in the following, make sure you execute all the scripts from the same directory. Either cd into
 the data directory or run them from the parent directory. It does not matter where, as you long as you do all steps from
-the same place. Otherwisem the scripts will not find the necessary files. 
+the same place. Otherwise the scripts will not find the necessary files. 
 
 First, to query the Bing API, you need to run
 
     python query.py <API token>
+
+Legally, to be on the safe side, you can specify the license of the images to be searched.
+I used 'Public', here which grants the users the most rights possible.
 
 The query.py will gather all the search results for each species in a separate .csv file. Then run
 
@@ -110,15 +113,22 @@ the image is corrupt.
 
 For the second case, the only way to really be sure is to go over every image and check if it shows
 the bird we were looking for. Bummer.
+But, soon enough you will find that the effort is worth it. For example, when searching for the Buchfink (chaffinch), 
+you will find pictures like these:
 
-**TODO: Maybe show some faulty images. Clarify how the legal situation is with showing images from
-somewhere on github. If no problem, show Star, show some crap images from other species and refer to
-bird dataset on google drive.
-If problem, state here that you cannot show the pictures.**
+**Show no-Buchfink pictures**
+
+A curious case is that of the Star (starling). When searching for Star, you will get e.g. 
+** Show star pictures **
+These are, well stars. Here, the german name tricked us. Another query with the english name did the trick.
+
+Unfortunately, there were not enough good pictures for the Reiherente and the Wachtel, so they did not make
+it into the final dataset. May they be forever in our hearts.
+
 
 ## 3. Train/Test split and mini dataset
 
-So now we have a nice and tidy dataset full of birds. Before we can get our hands dirty with the ML models, there
+Now  we have a nice and tidy dataset full of birds. Before we can get our hands dirty with the ML models, there
 are still two things to do. First, we need to split all the images into two categories, training and testing.
 The ML models will be trained on one dataset and evaluated on the other. But it is also always a good idea, to have
 a smaller version of your full dataset, so you can quickly train different ML models and compare their 
