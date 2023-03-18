@@ -32,7 +32,7 @@ def query_bing(search_term, key, offset=0, min_size=240, max_images=150):
     """
 
     params = dict(q=search_term, count=max_images, min_height=min_size, min_width=min_size,
-                  offset=offset)
+                  offset=offset, license='Public')
     search_url = 'https://api.bing.microsoft.com/v7.0/images/search'
     response = requests.get(search_url, headers={"Ocp-Apim-Subscription-Key": key}, params=params)
     response.raise_for_status()
