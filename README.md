@@ -22,10 +22,15 @@ you do a very similar thing, just with bears. Anyway, I thought it would be a co
 was motivation enough.
 
 My goal was, to really do an end-to-end project, i.e. from data to a deployed web app.
-I chose to limit myself to the 74 most common birds in Austria (according to Birdlife **\<add birdlife link\>**).
-To correctly name 74 different bird species is already not an easy task for us humans (although it is also not that hard,
+I chose to limit myself to the 74 most common birds (72 in the end) in Austria (according to Birdlife **\<add birdlife link\>**).
+To correctly name that many different bird species is already not an easy task for us humans (although it is also not that hard,
 once you have some experience), so it also should be a little bit of a challenge to train a ML model to do it.
-In the following, I will tell you how I went about to do that...
+
+This repository is meant to be more of a blog post, than a working code repo.
+Of course the code in here works, and you can also re-create the whole project if you like (see section **\< add DIY section \>**)
+but, the main focus is on what was done, not how it was done.
+So, the code is split up into several .py files and jupyter notebooks, and there is no nice user interface.
+That being said, let me tell you how this project came to be.
 
 ## 1. Data gathering
 
@@ -64,30 +69,6 @@ Even if there are less search results for a species, or some images are unusable
 have more than enough training data and still don't pay one cent. Nice.
 
 
-### Execution
-
-The birds are listed in the data/austrian_birds.csv file. This file will be accessed by all the data gathering scripts.
-In there, we have the german name, and the english name of each of the 74 species. The german name, because often times
-it is much nicer (e.g. compare Mönchsgrasmücke and black cap) and the english name for the sake of internationality. 
-
-Here and in the following, make sure you execute all the scripts from the same directory. Either cd into
-the data directory or run them from the parent directory. It does not matter where, as you long as you do all steps from
-the same place. Otherwise the scripts will not find the necessary files. 
-
-First, to query the Bing API, you need to run
-
-    python query.py <API token>
-
-Legally, to be on the safe side, you can specify the license of the images to be searched.
-I used 'Public', here which grants the users the most rights possible.
-
-The query.py will gather all the search results for each species in a separate .csv file. Then run
-
-    python download_urls.py
-
-to actually download the images. You will get one directory for each bird species inside the newly created images
-directory.
-
 ## 2. Data cleaning
 
 Ok, up until now, everything was easy and nicely automatic. Now, we will have to do some manual labor.
@@ -101,20 +82,11 @@ There are two cases:
 2) The file does not depict the desired bird
 
 Luckily for us, the first case can be automated. Unfortunately, the second case cannot.
+Ok, so by utilizing the PIL.Image class, we can quickly remove all images of the first case.
+Then, the fun part begins. Going over every one of the bird species and looking at every image truly is 
+a pain in the ass. However, quickly, it becomes obvious why this is important.
+For example, the Buchfink. 
 
-### Execution
-
-To remove all the images that cannot be opened at all, run
-
-    python remove_faulty_images.py
-
-The script makes use of the PIL.Image class. The assumption is, that if PIL cannot open it, than
-the image is corrupt.
-
-For the second case, the only way to really be sure is to go over every image and check if it shows
-the bird we were looking for. Bummer.
-But, soon enough you will find that the effort is worth it. For example, when searching for the Buchfink (chaffinch), 
-you will find pictures like these:
 
 **Show no-Buchfink pictures**
 
@@ -147,6 +119,67 @@ Then, to create the mini dataset, run
 
     python create_mini_ds.py
 
-##3 Training
+## 3 Training
 
 Ok, so now we have a 
+
+## 4. Deployment
+
+Azure tutorial: https://learn.microsoft.com/en-us/azure/app-service/quickstart-python?tabs=flask%2Cwindows%2Cvscode-aztools%2Czip-deploy%2Cdeploy-instructions-azportal%2Cterminal-bash%2Cdeploy-instructions-zip-curl
+
+
+# DIY
+
+In this section, I will briefly show you how you can re-create the whole project.
+Basically, you there are three directories: data, training and web.
+The data directory contains all scripts needed to re-create the dataset, the training directory contains 
+jupyter notebooks needed for training the ML model, and the web directory contains the necessary code for
+deploying the Flask app.
+
+## Data
+
+In order to re-create the data set, you first need to create an Azure account and a Bing search resource.
+With the corresponding token, you can then run
+
+    python query.py <API token>
+
+Legally, to be on the safe side, you can specify the license of the images to be searched.
+I used 'Public', here which grants the users the most rights possible.
+
+The query.py will gather all the search results for each species in a separate .csv file. Then run
+
+    python download_urls.py
+
+to actually download the images. You will get one directory for each bird species inside the newly created images
+directory.
+
+To remove all the images that cannot be opened at all, run
+
+    python remove_faulty_images.py
+
+Then you will have to go over every image and check if correctly depicts the mentioned bird
+(sorry, there is just no way around that).
+
+Once, you have a fine-and-dandy dataset, you can go over to training.
+
+## Training
+
+For training, you can use the training.ipynb jupyter notebook. It works as is (just to be sure to install the necessary 
+python packages).
+In there, I am using the Resnet50 architecture. Of course, you can also experiment with other
+architectures if you like. Just exchange the architecture in the notebook and tune the hyper-parameters.
+Maybe you can even achive better results!
+
+## Web
+
+To deploy the web app, you can utilize the existing code in the web directory. 
+Since the model itself is too big for the github repo, you will have to add it to the models directory
+in web. Then, change the name of the loaded model in app.py
+Make sure you have installed flask, e.g. with pip install flask
+
+To test the Flask app locally, run
+
+    export FLASK_APP=<name_of_your_app.py>
+    python -m flask run
+
+It will start the app on your localhost at port 5000. Go to localhost:5000 and you should see the app.
