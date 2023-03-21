@@ -6,7 +6,7 @@
 austro_bird_classifier is a CNN-based classifier that can distinguish the 72 most common bird species
 found in Austria by their image.
 
-You can test it here: **\<add link to Flask app\>**
+You can test it here: https://austro-bird-classifier.scm.azurewebsites.net
 
 Just upload a picture of a bird you saw in your garden (given that you live in Austria), and 
 it will tell you (most likely) what species that bird belongs to.
