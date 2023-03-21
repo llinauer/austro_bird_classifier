@@ -2,14 +2,18 @@
 ## An End-to-end machine learning project using pytorch, fastai and Flask.
 
 #TLDR
+
 austro_bird_classifier is a CNN-based classifier that can distinguish the 72 most common bird species
-found in Austria by image.
+found in Austria by their image.
 
 You can test it here: **\<add link to Flask app\>**
 
-Just upload a picture of a bird you saw in your garden (given that you live in Austria) and 
+Just upload a picture of a bird you saw in your garden (given that you live in Austria), and 
 it will tell you (most likely) what species that bird belongs to.
 Super simple!
+
+**\< Add pretty bird test image here \>**
+
 
 # The whole story
 
@@ -268,4 +272,4 @@ To test the Flask app locally, run
     export FLASK_APP=<name_of_your_app.py>
     python -m flask run
 
-It will start the app on your localhost at port 5000. Go to localhost:5000 and you should see the app.
+It will start the app on your localhost at port 5000. Go to localhost:5000,  and you should see the app.
