@@ -68,6 +68,8 @@ To allow some error margin, let's not exceed 2000 images / species.
 Even if there are less search results for a species, or some images are unusable, we should
 have more than enough training data and still don't pay one cent. Nice.
 
+As a short legal notice, to be safe, I am only using images that are free to share and use for personal purposes.
+
 
 ## 2. Data cleaning
 
@@ -92,8 +94,8 @@ For example, the Buchfink.
 
 A curious case is that of the Star (starling). When searching for Star, you will get e.g. 
 ** Show star pictures **
-These are, well stars. Here, the german name tricked us. Another query with the english name did the trick.
-
+These are, well stars. Here, the german name tricked us. So let's use the english name for the Star. All good.
+After this painstakingly long process, we are left with 13473 images. That's pretty impressive! 
 Unfortunately, there were not enough good pictures for the Reiherente and the Wachtel, so they did not make
 it into the final dataset. May they be forever in our hearts.
 
@@ -107,25 +109,109 @@ a smaller version of your full dataset, so you can quickly train different ML mo
 performance, without the need to wait the full 3+ hours it takes to train on the full dataset.
 Trust me, nothing is more annoying than waiting 3 hours just to find out that nothing changed (or worse, that
 the ML model performs worse than before).
+For splitting, let's use 80% of the images (10677) for training and 20% (2769) for testing.
+The mini dataset should contain only so many images, so that you can quickly train a ML model and 
+get a good estimate of its performance. That's pretty vague, I know. 
+To be more specific, a good idea is to have a number of x * maximum batch size of your GPU, with 
+x around 4 or 5. Then you can sweep through the whole dataset in 4 or 5 batches, and you still get a good
+estimate of performance. The same goes for the mini test data set.
+Since I am using a batch size of 256, tailored my mini dataset to consist of 1024 training images and 
+512 test images. 
 
-### Execution
 
-To split the data, run
+## 4. Training
 
-    python train_test_split.py
+Alright, with that we can begin the training process. Until now, I always vaguely spoke of ML models, but which
+model should we actually use? There are numerous possible answers to this questions, but a good choice for an amateur project like this
+is any kind of Convolutional Neural Network (CNN). And one kind of CNN achieves very impressive results on image classification
+tasks, while still being small enough to be trained quickly. The ResNet.
+ResNet is short for Residual Neural Network. In short, ResNets learn "the residual functions with respect to the layer input,
+instead of learning unreferenced functions". Sounds complicated, and it kinda is, so don't worry too much about
+the details. If you are interested, you can read the ResNet paper (https://arxiv.org/pdf/1512.03385.pdf).
+The main benefit of this "learning of residuals" is, that it allows for the training of much deeper networks
+than otherwise possible. And deeper networks lead to an increased performance in classification (in reality, it is not as straightforward as that,
+but, it's a good approximation).
+Ok, so a ResNet it is. But which one? Meaning, how deep should the network actually be?
+This is a good question, and the answer is: it kinda depends on your data.
+So, different network sizes will behave differently for different kinds of data. The only real way to find out, is by trying.
+And that is what our mini dataset is for. 
 
-It will create a train and a test child in the images directory.
-Then, to create the mini dataset, run 
+But first, a quick word on software. I mainly used the fastai library (https://www.fast.ai/) for training here,
+because it allows to quickly build and train a good performing model by providing a baseline framework
+for many tasks. However, it also has numerous drawbacks (e.g. poor documentation, too much reliance on Jupyter Notebooks, etc.)
+and prefer using pytorch (on which it is based) most of the time. But, as said, for quickly getting good results (which was
+my focus in this project) it works pretty neat.
 
-    python create_mini_ds.py
+One thing that fastai provides you, is pre-trained models. For image classification, we actually don't need (and want) to
+train our network from scratch. There are numerous image classification datasets and models that were trained on them out there.
+By using a method called transfer learning, we can take such a pre-trained model, adapt it to our own dataset and can 
+get impressive results, even with rather small datasets.
 
-## 3 Training
+Ok, so back to the model discussion. We want to build on a pre-trained ResNet.
+I chose to take a closer look at four different models. The ResNet34, XResNet34, ResNet50 and XResNet50.
+The 34 and 50 means the number of residual layers in the network. The XResNets utilize some additional hacks
+from the 'Bag of Tricks' paper (https://arxiv.org/pdf/1812.01187.pdf).
+I trained those four models on the mini training data set (15 epochs each) and evaluated their performance in terms
+of accuracy on the mini test data set. Additionally, I used data augmentation (resizing, normalization) and mixed
+precision training (https://arxiv.org/pdf/1710.03740.pdf).
 
-Ok, so now we have a 
+The results are as follows:
 
-## 4. Deployment
+| **Model** | **Accuracy** |
+|-----------|--------------|
+| Resnet34  |     9.6%     |
+| XResnet34 |     9.2%     |
+| Resnet50  |     76%      |
+| XResnet50 |     8.8%     |
 
-Azure tutorial: https://learn.microsoft.com/en-us/azure/app-service/quickstart-python?tabs=flask%2Cwindows%2Cvscode-aztools%2Czip-deploy%2Cdeploy-instructions-azportal%2Cterminal-bash%2Cdeploy-instructions-zip-curl
+Whoa, now that's a clear answer. Tbh, I am not really sure, why the Resnet50 outperforms the others
+by such a large margin on the mini data set. It may be due to the composition of the data set, my data augmentation
+techniques or other factors. But, for this application, I don't really care. As long as I get a good accuracy, I am happy.
+
+With that information, let's go back to the full data set and train the Resnet50 for, say, 50 epochs.
+Luckily, I have a Nvidia Geforce RTX A5500 at my disposal, so training only takes about 3(!) hours.
+Awesome. After 50 epochs, we get a whooping 92.2% accuracy on the test data set.
+What we could do now, is go back and combine the training and test data set into one big pile, train again
+and profit from the additional training examples. I am not going to that here, though, I am satisfied with the 92%.
+
+
+## 5. Deployment
+
+The last ingredient, is to package everything into a nice (depends, on who you ask) web app and deploy it for everybody to use.
+Since I now already have an Azure account, I am going to do that on Azure. There are plenty of other platforms 
+where you can deploy python apps easily, but most of them won't be free anyway (depending on the size of the app), so I figured, might as well.
+For my web app, I am going to use Flask. Flask is super simple to learn, and it allows you to quickly
+build (really horribly looking) web apps. Beauty is in the eye of the beholder anyway, so I spare myself the hassle
+of trying to get a fancy CSS styling to work (which it won't anyway) and just stick to bare-bone HTML.
+
+A quick test, shows that I can access my web app locally, and it does what it should.
+
+**\< Add auerhuhn test image here \>**
+
+Cool, this clearly is an Auerhuhn!
+
+The deployment is actually as easy. If you are using VS Code, you can just install the Azure extension there,
+login to Azure, create a new App Service Plan and start deploying. Stunning.
+Unfortunately, since our App is quite bulky (pytorch alone needs around 900 MB of disk space), the Free tier
+is no option here. I needed to increase to the B2 tier, which costs around 3 cents / hour. Ouch!
+Well, whatever. 
+After some waiting time, the app is deployed and ready to be accessed at:
+
+https://austro-bird-classifier.scm.azurewebsites.net
+
+Another test, another success!
+
+**\< Add rotkehlchen test image here \>**
+
+Now, what happens, if I were to supply a different image, one that does not show a bird?
+Hmm, let's test. How about I upload a picture of me?
+
+**\< Add me test image here \>**
+
+Well, not quite. I still feel flattered, though.
+
+
+Thank you for reading! I hope you enjoyed it!
 
 
 # DIY
@@ -168,14 +254,14 @@ For training, you can use the training.ipynb jupyter notebook. It works as is (j
 python packages).
 In there, I am using the Resnet50 architecture. Of course, you can also experiment with other
 architectures if you like. Just exchange the architecture in the notebook and tune the hyper-parameters.
-Maybe you can even achive better results!
+Maybe you can even achieve better results!
 
 ## Web
 
 To deploy the web app, you can utilize the existing code in the web directory. 
 Since the model itself is too big for the github repo, you will have to add it to the models directory
 in web. Then, change the name of the loaded model in app.py
-Make sure you have installed flask, e.g. with pip install flask
+Make sure you have flask installed, e.g. with pip install flask
 
 To test the Flask app locally, run
 
