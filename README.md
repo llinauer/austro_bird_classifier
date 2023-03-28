@@ -31,7 +31,7 @@ To correctly name that many different bird species is already not an easy task f
 once you have some experience), so it also should be a little bit of a challenge to train a ML model to do it.
 
 This repository is meant to be more of a blog post, than a working code repo.
-Of course the code in here works, and you can also re-create the whole project if you like (see section **\< add DIY section \>**)
+Of course the code in here works, and you can also re-create the whole project if you like (see section [DIY](https://github.com/llinauer/austro_bird_classifier/blob/main/README.md#diy))
 but, the main focus is on what was done, not how it was done.
 So, the code is split up into several .py files and jupyter notebooks, and there is no nice user interface.
 That being said, let me tell you how this project came to be.
@@ -44,18 +44,18 @@ In my case, I needed lots of pictures of birds.
 There are already some bird picture datasets out there in the internet (e.g. https://www.kaggle.com/datasets/gpiosenka/100-bird-species),
 but I don't know of a dataset specifically for austrian birds.
 So the next best thing is to just google birds and download the resulting images. Easy, right?
-However, a quick back-of-an envelope **(schreibt man so?)** calculation suggests that this is indedd not as easy.
+However, a quick back-of-the envelope calculation suggests that this is indeed not that easy.
 Let's assume that we need at least 50 pictures of each species to allow for a good classification accuracy.
 74 * 50 = 3700. Further, assume that it takes around 10 seconds to find a suitable image, click on it and then download it.
 3700 * 10 seconds = 37000 seconds ~ 10 hours. And that is the bare minimum. Let's say we want a 100 pictures
-per bird species, so double the effort, and you are at 20 hours. Uph **(?)**!
+per bird species, so double the effort, and you are at 20 hours. Ouch.
 There's gotta be a better way. And actually, there is.
 
 Bing allows you to query pictures via its web API. To use it, you first need a Microsoft Azure account (which is free).
 After registration, you can create a Bing Search resource (v7 at the time of writing) which can also be used for free, if you
-don't exceed a certain monthly limit of queries to the Bing API.
+don't exceed a certain monthly limit of queries.
 The lowest-pricing tier includes 1000 queries per month, a maximum of 3 queries per second and up to 150 results per query.
-Once you created your resource, you can get a Bing API token from **\< add link where to get token \>**.
+Once you created your resource, you can get a token which you can use to authenticate against the API.
 
 To get the maximum out of our free tier, let's do another quick calculation.
 
@@ -84,14 +84,24 @@ picture of a bird. We don't want our ML model to train on any of those.
 
 There are two cases:
 
-1) The file cannot be opened at all
-2) The file does not depict the desired bird
+1) The file is not an image at all
+2) The image does not depict the desired bird
 
 Luckily for us, the first case can be automated. Unfortunately, the second case cannot.
 Ok, so by utilizing the PIL.Image class, we can quickly remove all images of the first case.
 Then, the fun part begins. Going over every one of the bird species and looking at every image truly is 
 a pain in the ass. However, quickly, it becomes obvious why this is important.
-For example, the Buchfink. 
+For example, the Buchfink:
+
+
+<p float="left">
+     <img src=https://user-images.githubusercontent.com/85884720/228279357-a1cee08d-064c-46ce-a91b-c43efaca5070.jpg width=300>
+     &nbsp; &nbsp; 
+     <img src=https://user-images.githubusercontent.com/85884720/222914253-f6fed1db-d07d-4af9-a30b-70c0d0e00dfe.png width=300>
+     &nbsp; &nbsp; 
+     <img src=https://user-images.githubusercontent.com/85884720/228279390-e43bbf9d-d468-4398-9b1b-91ea111b443c.jpg width=300>
+</p>
+
 
 
 **Show no-Buchfink pictures**
