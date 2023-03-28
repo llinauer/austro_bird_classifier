@@ -1,7 +1,7 @@
 # austro_bird_classifier
 ## An End-to-end machine learning project using pytorch, fastai and Flask.
 
-#TLDR
+# TLDR
 
 austro_bird_classifier is a CNN-based classifier that can distinguish the 72 most common bird species
 found in Austria by image.
@@ -12,7 +12,10 @@ Just upload a picture of a bird you saw in your garden (given that you live in A
 it will tell you (most likely) what species that bird belongs to.
 Super simple!
 
-**\< Add pretty bird test image here \>**
+<p float="left">
+     <img src=https://user-images.githubusercontent.com/85884720/228293840-5f5589fe-b829-433b-a957-a79a124fe390.png width=300>
+</p>
+
 
 
 # The whole story
