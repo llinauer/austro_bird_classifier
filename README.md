@@ -48,7 +48,7 @@ However, a quick back-of-the envelope calculation suggests that this is indeed n
 Let's assume that we need at least 50 pictures of each species to allow for a good classification accuracy.
 74 * 50 = 3700. Further, assume that it takes around 10 seconds to find a suitable image, click on it and then download it.
 3700 * 10 seconds = 37000 seconds ~ 10 hours. And that is the bare minimum. Let's say we want a 100 pictures
-per bird species, so double the effort, and you are at 20 hours. Ouch.
+per bird species, so double the effort, and you are at 20 hours. Oh dear.
 There's gotta be a better way. And actually, there is.
 
 Bing allows you to query pictures via its web API. To use it, you first need a Microsoft Azure account (which is free).
@@ -95,20 +95,25 @@ For example, the Buchfink:
 
 
 <p float="left">
-     <img src=https://user-images.githubusercontent.com/85884720/228279357-a1cee08d-064c-46ce-a91b-c43efaca5070.jpg width=300>
+     <img src=https://user-images.githubusercontent.com/85884720/228279357-a1cee08d-064c-46ce-a91b-c43efaca5070.jpg width=200>
      &nbsp; &nbsp; 
-     <img src=https://user-images.githubusercontent.com/85884720/222914253-f6fed1db-d07d-4af9-a30b-70c0d0e00dfe.png width=300>
+     <img src=https://user-images.githubusercontent.com/85884720/228280122-90be8e9d-9743-4ef0-928b-4de6a7f26f5a.jpg width=200>
      &nbsp; &nbsp; 
-     <img src=https://user-images.githubusercontent.com/85884720/228279390-e43bbf9d-d468-4398-9b1b-91ea111b443c.jpg width=300>
+     <img src=https://user-images.githubusercontent.com/85884720/228279390-e43bbf9d-d468-4398-9b1b-91ea111b443c.jpg width=200>
 </p>
 
-
-
-**Show no-Buchfink pictures**
+The first picture shows some eggs, which may be from a Buchfink but that's not what we wanted. The second shows a drawn Buchfink and that's also not what
+we wanted. And the last obviously is a Spatz, so nice try.
+As you see, data cleaning really is important. The case of the Spatz is actually crucial. In order to train an ML model to distinguish different classes, you actually need data that correctly displays these classes. And in order to get his, you (or somebody else) actually needs to know what constitutes correct data. That's why domain knowledge is so important in Machine Learning.
 
 A curious case is that of the Star (starling). When searching for Star, you will get e.g. 
-** Show star pictures **
-These are, well stars. Here, the german name tricked us. So let's use the english name for the Star. All good.
+
+<p float="left">
+     <img src=https://user-images.githubusercontent.com/85884720/228281774-b847d578-5051-4442-beca-5d12a42e4ef7.gif width=200>
+</p>
+
+This is, well, a star. Here, there is actually nothing wrong with the search result, but with the query itself. The german name tricked us.
+So let's use the english name for the Star. All good.
 After this painstakingly long process, we are left with 13473 images. That's pretty impressive! 
 Unfortunately, there were not enough good pictures for the Reiherente and the Wachtel, so they did not make
 it into the final dataset. May they be forever in our hearts.
@@ -129,7 +134,7 @@ get a good estimate of its performance. That's pretty vague, I know.
 To be more specific, a good idea is to have a number of x * maximum batch size of your GPU, with 
 x around 4 or 5. Then you can sweep through the whole dataset in 4 or 5 batches, and you still get a good
 estimate of performance. The same goes for the mini test data set.
-Since I am using a batch size of 256, tailored my mini dataset to consist of 1024 training images and 
+Since I am using a batch size of 256, I tailored my mini dataset to consist of 1024 training images and 
 512 test images. 
 
 
@@ -141,7 +146,7 @@ is any kind of Convolutional Neural Network (CNN). And one kind of CNN achieves 
 tasks, while still being small enough to be trained quickly. The ResNet.
 ResNet is short for Residual Neural Network. In short, ResNets learn "the residual functions with respect to the layer input,
 instead of learning unreferenced functions". Sounds complicated, and it kinda is, so don't worry too much about
-the details. If you are interested, you can read the ResNet paper (https://arxiv.org/pdf/1512.03385.pdf).
+the details. If you are interested, you can read the [ResNet paper](https://arxiv.org/pdf/1512.03385.pdf).
 The main benefit of this "learning of residuals" is, that it allows for the training of much deeper networks
 than otherwise possible. And deeper networks lead to an increased performance in classification (in reality, it is not as straightforward as that,
 but, it's a good approximation).
@@ -150,7 +155,7 @@ This is a good question, and the answer is: it kinda depends on your data.
 So, different network sizes will behave differently for different kinds of data. The only real way to find out, is by trying.
 And that is what our mini dataset is for. 
 
-But first, a quick word on software. I mainly used the fastai library (https://www.fast.ai/) for training here,
+But first, a quick word on software. I mainly used the [fastai library](https://www.fast.ai/) for training here,
 because it allows to quickly build and train a good performing model by providing a baseline framework
 for many tasks. However, it also has numerous drawbacks (e.g. poor documentation, too much reliance on Jupyter Notebooks, etc.)
 and prefer using pytorch (on which it is based) most of the time. But, as said, for quickly getting good results (which was
@@ -164,10 +169,10 @@ get impressive results, even with rather small datasets.
 Ok, so back to the model discussion. We want to build on a pre-trained ResNet.
 I chose to take a closer look at four different models. The ResNet34, XResNet34, ResNet50 and XResNet50.
 The 34 and 50 means the number of residual layers in the network. The XResNets utilize some additional hacks
-from the 'Bag of Tricks' paper (https://arxiv.org/pdf/1812.01187.pdf).
+from the ['Bag of Tricks' paper](https://arxiv.org/pdf/1812.01187.pdf).
 I trained those four models on the mini training data set (15 epochs each) and evaluated their performance in terms
-of accuracy on the mini test data set. Additionally, I used data augmentation (resizing, normalization) and mixed
-precision training (https://arxiv.org/pdf/1710.03740.pdf).
+of accuracy on the mini test data set. Additionally, I used data augmentation (resizing, normalization) and [mixed
+precision training](https://arxiv.org/pdf/1710.03740.pdf).
 
 The results are as follows:
 
@@ -194,13 +199,15 @@ and profit from the additional training examples. I am not going to that here, t
 The last ingredient, is to package everything into a nice (depends, on who you ask) web app and deploy it for everybody to use.
 Since I now already have an Azure account, I am going to do that on Azure. There are plenty of other platforms 
 where you can deploy python apps easily, but most of them won't be free anyway (depending on the size of the app), so I figured, might as well.
-For my web app, I am going to use Flask. Flask is super simple to learn, and it allows you to quickly
+For my web app, I am going to use [Flask](https://flask.palletsprojects.com/en/2.2.x/). Flask is super simple to learn, and it allows you to quickly
 build (really horribly looking) web apps. Beauty is in the eye of the beholder anyway, so I spare myself the hassle
 of trying to get a fancy CSS styling to work (which it won't anyway) and just stick to bare-bone HTML.
 
 A quick test, shows that I can access my web app locally, and it does what it should.
 
-**\< Add auerhuhn test image here \>**
+<p float="left">
+     <img src=https://user-images.githubusercontent.com/85884720/228289147-14512e14-ca06-4eda-916e-8f3a821e44ed.png width=200>
+</p>
 
 Cool, this clearly is an Auerhuhn!
 
@@ -208,22 +215,24 @@ The deployment is actually as easy. If you are using VS Code, you can just insta
 login to Azure, create a new App Service Plan and start deploying. Stunning.
 Unfortunately, since our App is quite bulky (pytorch alone needs around 900 MB of disk space), the Free tier
 is no option here. I needed to increase to the B2 tier, which costs around 3 cents / hour. Ouch!
-Well, whatever. 
 After some waiting time, the app is deployed and ready to be accessed at:
 
 https://austro-bird-classifier.scm.azurewebsites.net
 
 Another test, another success!
 
-**\< Add rotkehlchen test image here \>**
+<p float="left">
+     <img src=https://user-images.githubusercontent.com/85884720/228289621-d4522041-a082-44c6-996e-c96576e7fddb.png width=200>
+</p>
 
 Now, what happens, if I were to supply a different image, one that does not show a bird?
 Hmm, let's test. How about I upload a picture of me?
 
-**\< Add me test image here \>**
+<p float="left">
+     <img src=https://user-images.githubusercontent.com/85884720/228290848-41bdeb6b-abc1-435b-bc52-7833ceb581a1.png width=200>
+</p>
 
 Well, not quite. I still feel flattered, though.
-
 
 Thank you for reading! I hope you enjoyed it!
 
@@ -231,7 +240,7 @@ Thank you for reading! I hope you enjoyed it!
 # DIY
 
 In this section, I will briefly show you how you can re-create the whole project.
-Basically, you there are three directories: data, training and web.
+Basically, there are three directories: data, training and web.
 The data directory contains all scripts needed to re-create the dataset, the training directory contains 
 jupyter notebooks needed for training the ML model, and the web directory contains the necessary code for
 deploying the Flask app.
@@ -244,7 +253,7 @@ With the corresponding token, you can then run
     python query.py <API token>
 
 Legally, to be on the safe side, you can specify the license of the images to be searched.
-I used 'Public', here which grants the users the most rights possible.
+I used 'Public', here which grants the users the most rights possible (with possbily 
 
 The query.py will gather all the search results for each species in a separate .csv file. Then run
 
@@ -260,7 +269,12 @@ To remove all the images that cannot be opened at all, run
 Then you will have to go over every image and check if correctly depicts the mentioned bird
 (sorry, there is just no way around that).
 
-Once, you have a fine-and-dandy dataset, you can go over to training.
+Once, you have a fine-and-dandy looking dataset, run
+
+    python train_test_split.py
+
+to split into a training and a test dataset.
+
 
 ## Training
 
@@ -275,11 +289,16 @@ Maybe you can even achieve better results!
 To deploy the web app, you can utilize the existing code in the web directory. 
 Since the model itself is too big for the github repo, you will have to add it to the models directory
 in web. Then, change the name of the loaded model in app.py
-Make sure you have flask installed, e.g. with pip install flask
+You will need to install some additional python packages to run the app.
+There is a requirements.txt file provided in the web directory, so you can just run
+
+    pip install -r requirements.txt
+    
+there
 
 To test the Flask app locally, run
 
     export FLASK_APP=<name_of_your_app.py>
     python -m flask run
 
-It will start the app on your localhost at port 5000. Go to localhost:5000,  and you should see the app.
+It will start the app on your localhost at port 5000. Go to localhost:5000 in your browser, and you should see the app.
