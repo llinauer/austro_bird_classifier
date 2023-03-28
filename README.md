@@ -296,4 +296,4 @@ To test the Flask app locally, run
     export FLASK_APP=<name_of_your_app.py>
     python -m flask run
 
-It will start the app on your localhost at port 5000. Go to localhost:5000,  and you should see the app.
+It will start the app on your localhost at port 5000. Go to localhost:5000 in your browser, and you should see the app.
