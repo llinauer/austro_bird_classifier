@@ -289,7 +289,12 @@ Maybe you can even achieve better results!
 To deploy the web app, you can utilize the existing code in the web directory. 
 Since the model itself is too big for the github repo, you will have to add it to the models directory
 in web. Then, change the name of the loaded model in app.py
-Make sure you have flask installed, e.g. with pip install flask
+You will need to install some additional python packages to run the app.
+There is a requirements.txt file provided in the web directory, so you can just run
+
+    pip install -r requirements.txt
+    
+there
 
 To test the Flask app locally, run
 
