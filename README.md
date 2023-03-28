@@ -62,7 +62,6 @@ Once you created your resource, you can get a token which you can use to authent
 
 To get the maximum out of our free tier, we need to utilize a little bit more maths:
 
-```math
 
 We can do 1000 queries with 150 images / query = 150k images.
 150k images / 74 species ~ 2027 images / species
@@ -73,7 +72,6 @@ To allow some error margin, let's not exceed 2000 images / species.
 13.333 is nasty, so let's say 13 queries.
 
 13 queries * 150 images = 1950 images with 13 * 74 = 962 queries.
-```
 
 Even if there are less search results for a species, or some images are unusable, we should
 have more than enough training data and still don't pay one cent. Nice.
