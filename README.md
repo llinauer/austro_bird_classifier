@@ -4,7 +4,7 @@
 #TLDR
 
 austro_bird_classifier is a CNN-based classifier that can distinguish the 72 most common bird species
-found in Austria by their image.
+found in Austria by image.
 
 You can test it here: https://austro-bird-classifier.scm.azurewebsites.net
 
@@ -26,7 +26,7 @@ you do a very similar thing, just with bears. Anyway, I thought it would be a co
 was motivation enough.
 
 My goal was, to really do an end-to-end project, i.e. from data to a deployed web app.
-I chose to limit myself to the 74 most common birds (72 in the end) in Austria (according to Birdlife **\<add birdlife link\>**).
+I chose to limit myself to the 74 most common birds (72 in the end) in Austria (according to [Birdlife](https://birdlife.at/page/vogelbestimmung)).
 To correctly name that many different bird species is already not an easy task for us humans (although it is also not that hard,
 once you have some experience), so it also should be a little bit of a challenge to train a ML model to do it.
 
