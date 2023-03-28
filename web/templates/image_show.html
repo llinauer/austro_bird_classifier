@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Austro Bird Classifier</title>
+    <style>
+    	h1 {text-align: center;
+    	    margin: 0;}
+    	h3 {text-align: center;}
+	div {text-align: center;}
+	form {display: table;
+	      margin: 0 auto;}
+	p {display: table-row;}
+	label {display: table-cell;
+	       padding-right: 30px;}
+	input {display: table-cell;}
+       
+    </style>
+</head>
+<body>
+    <h1>Austro Bird Classifier</h1>
+    <br/>
+    <form method=post enctype=multipart/form-data>
+        <p>
+            <label for=file>Upload a bird image as .jpg or .png: </label>
+      	    <input type=file name=file>
+      	</p>
+      	<br />
+      	<p>
+            <input type=submit name=upload_button value=Upload>
+        </p>
+    </form>
+    <br/>
+    <div class=mt-5>
+        <img src="{{ img_src }}" alt="">
+    </div>
+    <br/>
+    <h3>{{ message }}</h3>
+    
+</body>
+</html>
