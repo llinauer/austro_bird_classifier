@@ -1,5 +1,5 @@
 # austro_bird_classifier
-## An End-to-end machine learning project using pytorch, fastai and Flask.
+## An End-to-end machine learning project using pytorch, fastai and Flask
 
 # TLDR
 
