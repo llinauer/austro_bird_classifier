@@ -12,8 +12,8 @@ Just upload a picture of a bird you saw in your garden (given that you live in A
 it will tell you (most likely) what species that bird belongs to.
 Super simple!
 
-<p float="left">
-     <img src=https://user-images.githubusercontent.com/85884720/228293840-5f5589fe-b829-433b-a957-a79a124fe390.png width=300>
+<p>
+     <img src=https://user-images.githubusercontent.com/85884720/228293840-5f5589fe-b829-433b-a957-a79a124fe390.png width=600>
 </p>
 
 
