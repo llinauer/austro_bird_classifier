@@ -19,9 +19,9 @@ Super simple!
 
 ## Introduction
 
-My girlfriend is a huge bird nerd. So am I, but she is even more so. I am an ML enthusiast too, so I thought
+My girlfriend is a huge bird nerd. So am I, but she even more so. I am an ML enthusiast too, so I thought
 of a way to combine these, and the idea for the austro_bird_classifier was born.
-Though, to be honest, it was not really my idea. I got it from working through the fastai fastbook, where 
+Though, to be honest, it was not really my idea. I got it from working through the fastai [fastbook](https://github.com/fastai/fastbook), where 
 you do a very similar thing, just with bears. Anyway, I thought it would be a cool project and that 
 was motivation enough.
 
