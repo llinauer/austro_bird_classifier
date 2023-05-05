@@ -6,7 +6,7 @@
 austro_bird_classifier is a CNN-based classifier that can distinguish the 72 most common bird species
 found in Austria by image.
 
-You can test it here: https://austro-bird-classifier.azurewebsites.net/
+You can test it here: https://austro-bird-classifier.azurewebsites.net/ (currently not active)
 
 Just upload a picture of a bird you saw in your garden (given that you live in Austria), and 
 it will tell you (most likely) what species that bird belongs to.
@@ -221,7 +221,7 @@ Unfortunately, since our App is quite bulky (pytorch alone needs around 900 MB o
 is no option here. I needed to increase to the B2 tier, which costs around 3 cents / hour. Ouch!
 After some waiting time, the app is deployed and ready to be accessed at:
 
-https://austro-bird-classifier.azurewebsites.net/
+https://austro-bird-classifier.azurewebsites.net/ (currently not active)
 
 Another test, another success!
 
